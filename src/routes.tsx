@@ -11,7 +11,7 @@ import EconomicLot from './pages/EconomicLot';
 function Routes() {
   return (
     <BrowserRouter>
-      <div className='container max-w-5xl min-h-4/5  bg-white shadow-md rounded flex items-stretch'>
+      <div className='container max-w-5xl h-4/5  bg-white shadow-md rounded flex items-stretch'>
         <Menu />
         <main className='flex-1 overflow-auto'>
           <Switch>

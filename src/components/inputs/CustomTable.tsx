@@ -1,10 +1,14 @@
 import React from 'react';
 import { resolveNestedAtribute } from '../../utils';
 
-const CustomTable = ({ header, items = [] }: any) => {
+interface Props {
+  header: any;
+  items: any[];
+}
+const CustomTable = ({ header, items = [] }: Props) => {
   return (
     <div className='w-full overflow-x-auto'>
-      <table className='mt-8 border-collapse w-full rounded overflow-x-scroll text-left'>
+      <table className='mt-8 border-collapse w-full rounded overflow-x-scroll text-left shadow'>
         <thead className='text-pink-500'>
           <tr className='shadow-sm'>
             {header.map((head: any) => (
@@ -16,7 +20,10 @@ const CustomTable = ({ header, items = [] }: any) => {
         </thead>
         <tbody>
           {items.map((item: any, index: number) => (
-            <tr className='transition-all hover:shadow-pink odd:bg-pink-50'>
+            <tr
+              className='transition-all hover:shadow-pink odd:bg-pink-50'
+              key={item.id}
+            >
               {header.map((head: any) => (
                 <td className='p-4' key={head.key}>
                   {head.component

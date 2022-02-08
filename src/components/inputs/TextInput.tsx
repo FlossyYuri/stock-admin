@@ -35,13 +35,13 @@ const TextInput = ({
 }: Props) => {
   return (
     <div
-      className={`text-input decoration flex flex-col items-start ${className}`}
+      className={`text-input w-full decoration flex flex-col items-start ${className}`}
     >
       <label htmlFor={name} className='font-semibold text-gray-400 mb-1'>
         {label}
       </label>
       <input
-        className='transition-all bg-gray-100 px-4 py-2 rounded text-gray-500 font-semibold focus:ring-2 focus:ring-pink-300 focus:outline-none'
+        className='transition-all bg-gray-100 px-4 py-2 w-full rounded text-gray-500 font-semibold focus:ring-2 focus:ring-pink-300 focus:outline-none'
         id={name}
         type={type}
         placeholder={placeholder}
