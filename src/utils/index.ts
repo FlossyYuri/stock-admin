@@ -8,8 +8,8 @@ export const resolveNestedAtribute = (obj: any, path: string) => {
 
 export const timeSanitizer = (time: number) => (time <= 9 ? `0${time}` : time);
 
-export function formatMoney(number = '0', currency = null) {
-  return `${Number.parseFloat(number).toLocaleString('pt', {
+export function formatMoney(number: number, currency = null) {
+  return `${Number.parseFloat(number.toString()).toLocaleString('pt', {
     style: 'decimal',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
