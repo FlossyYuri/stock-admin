@@ -15,3 +15,6 @@ export function formatMoney(number: number, currency = null) {
     maximumFractionDigits: 2,
   })} MT`;
 }
+
+export const calcPercentage = (acc: number, total: number) =>
+  ((acc * 100) / total).toFixed(2);

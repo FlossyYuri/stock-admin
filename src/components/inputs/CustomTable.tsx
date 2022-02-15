@@ -3,12 +3,13 @@ import { resolveNestedAtribute } from '../../utils';
 
 interface Props {
   header: any;
+  className?: any;
   items: any[];
   lastItem?: any;
 }
-const CustomTable = ({ header, items = [], lastItem }: Props) => {
+const CustomTable = ({ header, className, items = [], lastItem }: Props) => {
   return (
-    <div className='w-full overflow-x-auto'>
+    <div className={`w-full overflow-x-auto ${className}`}>
       <table className='mt-8 border-collapse w-full rounded overflow-x-scroll text-left shadow'>
         <thead className='text-pink-500'>
           <tr className='shadow-sm'>
