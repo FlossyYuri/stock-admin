@@ -4,127 +4,14 @@ import Button from '../../components/Button';
 import CustomTable from '../../components/inputs/CustomTable';
 import TextInput from '../../components/inputs/TextInput';
 import Title from '../../components/Title';
-import { calcPercentage, formatMoney } from '../../utils';
+import { useABCTable } from '../../context';
+import { headersABC, headersABCClass, items } from '../../data';
+import { calcPercentage, formatMoney, getClass } from '../../utils';
 
 type Inputs = {
   id: string;
   cost: number;
   cmm: number;
-};
-
-const ABCTable = {
-  a: 70,
-  b: 20,
-  c: 10,
-};
-export const headersABCClass = [
-  {
-    key: 'class',
-    label: 'Classe',
-  },
-  {
-    key: 'value',
-    label: '% em Valor ',
-  },
-  {
-    key: 'quantity',
-    label: '% em Quantidade',
-  },
-];
-export const headersABC = [
-  {
-    key: 'id',
-    label: 'Código do produto',
-  },
-  {
-    key: 'cost',
-    label: 'Custo Unit.',
-  },
-  {
-    key: 'cmm',
-    label: 'CMM',
-  },
-  {
-    key: 'value',
-    label: 'Custo Total x CMM',
-  },
-  {
-    key: 'class',
-    label: 'Classificação %',
-  },
-  {
-    key: 'class2',
-    label: 'Class. crescente',
-  },
-  {
-    key: 'classABC',
-    label: 'Class. ABC',
-  },
-];
-
-const items: { id: string; cost: number; cmm: number }[] = [
-  {
-    id: 'P1',
-    cost: 4,
-    cmm: 167,
-  },
-  {
-    id: 'P2',
-    cost: 3,
-    cmm: 1167,
-  },
-  {
-    id: 'P3',
-    cost: 5,
-    cmm: 83,
-  },
-  {
-    id: 'P4',
-    cost: 10,
-    cmm: 34,
-  },
-  {
-    id: 'P5',
-    cost: 6,
-    cmm: 58,
-  },
-  {
-    id: 'P6',
-    cost: 8,
-    cmm: 13,
-  },
-  {
-    id: 'P7',
-    cost: 20,
-    cmm: 142,
-  },
-  {
-    id: 'P8',
-    cost: 15,
-    cmm: 33,
-  },
-  {
-    id: 'P9',
-    cost: 20,
-    cmm: 15,
-  },
-  {
-    id: 'P10',
-    cost: 3,
-    cmm: 23,
-  },
-];
-
-const getClass = (acc: number, acc1: number) => {
-  if (acc <= ABCTable.a) return 'A';
-  else if (acc > ABCTable.a && acc < ABCTable.a + ABCTable.b) return 'B';
-  if (
-    Math.abs(acc - (ABCTable.b + ABCTable.a)) <
-    Math.abs(acc1 - (ABCTable.b + ABCTable.a))
-  ) {
-    return 'B';
-  }
-  return 'C';
 };
 
 const generateRow = (
@@ -138,7 +25,8 @@ const generateRow = (
     cmm: number;
   },
   produtos: Inputs[],
-  total: number
+  total: number,
+  ABCTable: any
 ) => {
   const sums = [...produtos]
     .sort((a, b) => b.cmm * b.cost - a.cmm * a.cost)
@@ -151,13 +39,15 @@ const generateRow = (
       };
       return prev;
     }, {} as any);
+
   Object.values(sums)
     .sort((a: any, b: any) => b.value - a.value)
     .reduce((prev, current: any) => {
-      sums[current.id].acc1 = prev;
-      sums[current.id].acc = prev + current.class;
+      sums[current.id].acc1 = Number(prev).toFixed(2);
+      sums[current.id].acc = Number(prev + current.class).toFixed(2);
       return prev + current.class;
     }, 0);
+
   const data = {
     id,
     cost,
@@ -165,27 +55,29 @@ const generateRow = (
     value: sums[id].value,
     class: sums[id].class + '%',
     class2: sums[id].class2,
-    classABC: getClass(sums[id].acc, sums[id].acc1),
+    classABC: getClass(sums[id].acc, sums[id].acc1, ABCTable),
   };
   return data;
 };
 
 function ABCMethod() {
+  const { table: ABCTable } = useABCTable() as any;
   const [total, setTotal] = useState(0);
   const [table, setTable] = useState<any>([
     { class: 'A', value: '-', quantity: 1 },
     { class: 'B', value: '-', quantity: '-' },
     { class: 'C', value: '-', quantity: '-' },
   ]);
-  const [produtos, setProduto] = useState<Inputs[]>(items);
+  const [produtos, setProduto] = useState<Inputs[]>([...items]);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     produtos.push(data);
-    setProduto(produtos);
+    setProduto([...produtos]);
   };
 
   useEffect(() => {
@@ -193,11 +85,13 @@ function ABCMethod() {
       (prev, current) => prev + current.cost * current.cmm,
       0
     );
-    setTotal(total);
+    setTotal(Number(total));
   }, [produtos]);
 
   useEffect(() => {
-    const apps = produtos.map((item) => generateRow(item, produtos, total));
+    const apps = produtos.map((item) =>
+      generateRow(item, produtos, total, ABCTable)
+    );
     const a = {
       count: 0,
       acc: 0,
@@ -246,7 +140,7 @@ function ABCMethod() {
         quantity: calcPercentage(c.count, produtos.length),
       },
     ]);
-  }, [produtos, total]);
+  }, [produtos, total, ABCTable]);
 
   return (
     <div className='w-full p-8 text-left'>
@@ -285,7 +179,9 @@ function ABCMethod() {
       </form>
       <CustomTable
         header={headersABC}
-        items={produtos.map((item) => generateRow(item, produtos, total))}
+        items={produtos.map((item) =>
+          generateRow(item, produtos, total, ABCTable)
+        )}
         lastItem={{
           id: items.length,
           value: formatMoney(total),

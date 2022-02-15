@@ -32,7 +32,7 @@ function ClassificationTable() {
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data: any) => {
     Object.keys(data).forEach((key: any) => {
-      setValue(key, data[key]);
+      setValue(key, Number(data[key]));
     });
     setTable(data);
   };
@@ -40,7 +40,7 @@ function ClassificationTable() {
     Object.keys(table).forEach((key: any) => {
       setValue(key, table[key]);
     });
-  }, []);
+  }, [setValue, table]);
 
   return (
     <div className='w-full p-8 text-left'>
