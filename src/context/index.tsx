@@ -3,9 +3,9 @@ const AuthContext = React.createContext(undefined);
 
 export const ABCTableProvider = ({ children }: any) => {
   const [table, setTable] = useState({
-    a: 80,
-    b: 15,
-    c: 5,
+    a: 70,
+    b: 20,
+    c: 10,
   });
 
   const data: any = { table, setTable };
