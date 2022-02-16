@@ -31,20 +31,10 @@ function EconomicLot() {
       <div className='grid grid-cols-2'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextInput
-            name='price'
-            type='number'
-            label='Valor Unitário'
-            placeholder='Digite o valor'
-            error={errors.price?.message}
-            register={register}
-            validation={{ min: 0 }}
-            rest={{ min: 0 }}
-          />
-          <TextInput
             name='annualConsumption'
             type='number'
             label='Consumo Anual'
-            placeholder='Ex: 2000'
+            placeholder='Ex: 2400'
             error={errors.annualConsumption?.message}
             register={register}
             validation={{ min: 0 }}
@@ -54,7 +44,7 @@ function EconomicLot() {
             name='shippingCost'
             type='number'
             label='Custo de Envio'
-            placeholder='Ex: 1000'
+            placeholder='Ex: 2000'
             error={errors.shippingCost?.message}
             register={register}
             validation={{ min: 0 }}
@@ -64,7 +54,7 @@ function EconomicLot() {
             name='cost'
             type='number'
             label='Custo de Posse'
-            placeholder='Ex: 20'
+            placeholder='Ex: 60'
             error={errors.cost?.message}
             register={register}
             validation={{ min: 0 }}

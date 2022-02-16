@@ -168,7 +168,7 @@ function ABCMethod() {
         <TextInput
           name='cmm'
           type='number'
-          label='Custo Médio Mensal'
+          label='Consumo Médio Mensal'
           placeholder=''
           error={errors.cmm?.message}
           register={register}
