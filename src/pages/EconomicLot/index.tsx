@@ -27,7 +27,7 @@ function EconomicLot() {
   };
   return (
     <div className='w-full p-8 text-left'>
-      <Title>EconomicLot</Title>
+      <Title>Lote Econômico</Title>
       <div className='grid grid-cols-2'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextInput
